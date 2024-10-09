@@ -1,35 +1,37 @@
+<!-- public/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEXTGEN</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXTGEN</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Upload your assignment</h1>
-    <form id="uploadForm" enctype="multipart/form-data" method="POST" action="upload.php">
-      <input type="text" name="username" placeholder="Your Name" required><br>
-      <input type="file" name="file" required><br>
-      <button type="submit">Upload</button>
-    </form>
+    <div class="container">
+        <h1>Upload YOUR File</h1>
+        <form id="uploadForm">
+            <input type="email" id="email" placeholder="Your Email" required>
+            <input type="file" id="fileInput" name="file" required>
+            <button type="submit">Upload</button>
+        </form>
+        <div id="message"></div>
+        
+        <h2>Leaderboard</h2>
+        <table id="leaderboard">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>User Email</th>
+                    <th>Uploaded At</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Leaderboard entries will be inserted here -->
+            </tbody>
+        </table>
+    </div>
 
-    <h2>Leaderboard</h2>
-    <table id="leaderboard">
-      <thead>
-        <tr>
-          <th>User</th>
-          <th>File</th>
-          <th>Download</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Data will be inserted dynamically using JavaScript -->
-      </tbody>
-    </table>
-  </div>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
-  </html>
+</html>

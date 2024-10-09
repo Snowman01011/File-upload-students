@@ -1,24 +1,47 @@
-// script.js
-document.addEventListener('DOMContentLoaded', function () {
-  fetchLeaderboard();
-});
+// public/script.js
+document.addEventListener('DOMContentLoaded', () => {
+    const uploadForm = document.getElementById('uploadForm');
+    const messageDiv = document.getElementById('message');
+    const leaderboardTableBody = document.getElementById('leaderboard').getElementsByTagName('tbody')[0];
 
-function fetchLeaderboard() {
-  fetch('leaderboard.json')
-    .then(response => response.json())
-    .then(data => {
-      const leaderboard = document.getElementById('leaderboard').getElementsByTagName('tbody')[0];
-      leaderboard.innerHTML = '';
+    uploadForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(uploadForm);
 
-      data.forEach(row => {
-        const newRow = leaderboard.insertRow();
-        const userNameCell = newRow.insertCell(0);
-        const fileNameCell = newRow.insertCell(1);
-        const downloadCell = newRow.insertCell(2);
-
-        userNameCell.textContent = row.user_name;
-        fileNameCell.textContent = row.file_name;
-        downloadCell.innerHTML = `<a href="uploads/${row.file_name}" download>Download</a>`;
-      });
+        fetch('/upload', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.text())
+        .then(data => {
+            messageDiv.textContent = data;
+            uploadForm.reset();
+            loadLeaderboard(); // Refresh the leaderboard after upload
+        })
+        .catch(error => {
+            messageDiv.textContent = 'Error: ' + error.message;
+        });
     });
-}
+
+    function loadLeaderboard() {
+        fetch('/leaderboard')
+            .then(response => response.json())
+            .then(data => {
+                // Clear the existing leaderboard entries
+                leaderboardTableBody.innerHTML = '';
+                // Populate the leaderboard
+                data.forEach(entry => {
+                    const row = leaderboardTableBody.insertRow();
+                    row.insertCell(0).textContent = entry.fileName;
+                    row.insertCell(1).textContent = entry.userEmail;
+                    row.insertCell(2).textContent = new Date(entry.uploadedAt).toLocaleString();
+                });
+            })
+            .catch(error => {
+                console.error('Error loading leaderboard:', error);
+            });
+    }
+
+    // Initial load of leaderboard
+    loadLeaderboard();
+});
